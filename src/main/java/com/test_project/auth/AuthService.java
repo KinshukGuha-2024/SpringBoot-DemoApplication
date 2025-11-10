@@ -1,5 +1,6 @@
 package com.test_project.auth;
 
+import com.test_project.mail.OtpMailService;
 import com.test_project.security.JwtService;
 import com.test_project.test_project.User.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,13 +15,15 @@ import java.security.SecureRandom;
 public class AuthService {
     private final UserRepository repo;
     private final PasswordEncoder encoder;
+    private final OtpMailService mailService;
     private final JwtService jwt;
     private final SecureRandom rnd = new SecureRandom();
 
-    private AuthService(UserRepository repo, PasswordEncoder encoder, JwtService jwt) {
+    private AuthService(UserRepository repo, PasswordEncoder encoder, JwtService jwt, OtpMailService mailService) {
         this.repo = repo;
         this.encoder = encoder;
         this.jwt = jwt;
+        this.mailService = mailService;
     }
 
     public void register(RegisterRequest request) {
@@ -34,8 +37,9 @@ public class AuthService {
         u.setStatus(UserStatus.Inactive);
         u.setIsVerified(VerificationStatus.No);
         u.setOtp(generateOtp());
-
         repo.save(u);
+
+        mailService.sendOtpEmail(u.getEmail(), u.getFirstname(), u.getOtp());
     }
 
     public String generateOtp() {
