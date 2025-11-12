@@ -1,4 +1,4 @@
-package com.test_project.config;
+package com.test_project.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

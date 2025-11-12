@@ -19,7 +19,7 @@ public class AuthService {
     private final JwtService jwt;
     private final SecureRandom rnd = new SecureRandom();
 
-    private AuthService(UserRepository repo, PasswordEncoder encoder, JwtService jwt, OtpMailService mailService) {
+    public AuthService(UserRepository repo, PasswordEncoder encoder, JwtService jwt, OtpMailService mailService) {
         this.repo = repo;
         this.encoder = encoder;
         this.jwt = jwt;
